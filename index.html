@@ -4,10 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Gallito Bien Happy</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-        
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FFF5E6;
@@ -16,42 +14,41 @@
         header {
             background-color: #FF6B35;
             color: white;
-            padding: 2em 1em;
+            padding: 1em;
             text-align: center;
-            position: relative;
         }
         .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 20px; /* Ajusta el espacio arriba del header */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
             margin-bottom: 10px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        }
+        .title-container {
+            text-align: center;
         }
         h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 2em;
         }
         .subheading {
-            font-size: 1.2em;
+            font-size: 1em;
             margin-top: 0.5em;
             font-style: italic;
         }
         main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2em;
+            padding: 1em;
         }
         .menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2em;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1em;
         }
         .menu-item {
             border: 2px solid #FF6B35;
@@ -70,13 +67,6 @@
             height: auto;
             border-radius: 5px;
         }
-        .menu-item h3 {
-            margin: 0.5em 0;
-        }
-        .menu-item p {
-            margin: 0.5em 0;
-            font-weight: bold;
-        }
         .menu-item button {
             background-color: #FF6B35;
             color: white;
@@ -93,7 +83,7 @@
         }
         #cart {
             position: fixed;
-            bottom: 1em;
+            top: 1em;
             right: 1em;
             background-color: #FF6B35;
             color: white;
@@ -101,11 +91,6 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        #cart:hover {
-            transform: scale(1.05);
         }
         #cart-modal {
             display: none;
@@ -117,8 +102,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 80%;
-            width: 400px;
+            max-width: 90%;
+            width: 300px;
             max-height: 80vh;
             overflow-y: auto;
         }
@@ -175,8 +160,10 @@
     <header>
         <div class="header-content">
             <img src="https://st3.depositphotos.com/29384342/35247/v/380/depositphotos_352476890-stock-illustration-cartoon-rooster-holding-fried-chicken.jpg" alt="Logo El gallito bien happy" class="logo">
-            <h1>🐔El Gallito Bien Happy🍗</h1>
-            <div class="subheading">Pollo Estilo Kentucky - el más crujiente del rumbo!</div>
+            <div class="title-container">
+                <h1>🐔El Gallito Bien Happy🍗</h1>
+                <div class="subheading">Pollo Estilo Kentucky - ¡el más crujiente del rumbo!</div>
+            </div>
         </div>
     </header>
     <main>
@@ -184,117 +171,154 @@
             <div class="menu-item">
                 <img src="https://static8.depositphotos.com/1003814/1018/i/380/depositphotos_10183327-stock-photo-big-hamburger-french-fries-and.jpg" alt="Hamburguesa con papas">
                 <h3>Hamburguesa Especial</h3>
-                <p>¡La hamburguesa que te hará cantar de felicidad! Jugosa, con todo el sabor que mereces.</p>
                 <p>$159.99</p>
+              <p>Crujiente, fresca y jugosa. ¡Nuestra favorita!</p>
                 <button onclick="addToCart('Hamburguesa Especial', 159.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
                 <img src="https://st3.depositphotos.com/23848204/31779/i/380/depositphotos_317794456-stock-photo-homemade-fried-chicken-french-fries.jpg" alt="Pollo frito con papas">
                 <h3>Combo Pollo Frito</h3>
-                <p>Pollo frito como en casa, crujiente y sabroso. ¡No hay nada mejor para el antojo!</p>
+              <p>Para chuparse los dedos.</p>
                 <p>$179.99</p>
                 <button onclick="addToCart('Combo Pollo Frito', 179.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
                 <img src="https://static8.depositphotos.com/1328914/862/i/380/depositphotos_8628755-stock-photo-fried-chicken-meal.jpg" alt="Comida de pollo frito">
                 <h3>Festín Familiar</h3>
-                <p>Para cuando quieras compartir el sabor. Un combo grande que hará feliz a toda la familia.</p>
+              <p>¡12 piezas de pollo, ensalada y bisquets!</p>
                 <p>$299.99</p>
                 <button onclick="addToCart('Festín Familiar', 299.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
                 <img src="https://st4.depositphotos.com/8687452/38373/i/380/depositphotos_383737694-stock-photo-fried-chicken-french-fries-nuggets.jpg" alt="Pollo frito, papas y nuggets">
                 <h3>Combo Variado</h3>
-                <p>¿No puedes decidir? ¡Mejor todo junto! Pollo, papas y nuggets para un festín completo.</p>
+              <p>Para los indecisos, ¡lo más pedido!</p>
                 <p>$199.99</p>
                 <button onclick="addToCart('Combo Variado', 199.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
                 <img src="https://st2.depositphotos.com/1031681/5785/i/380/depositphotos_57858061-stock-photo-fried-chicken-wings-in-batter.jpg" alt="Alitas de pollo fritas">
                 <h3>Alitas Picantes</h3>
-                <p>Un toque picante que te hará querer más. ¡Las alitas más sabrosas del barrio!</p>
+              <p>¡No aptas para principantes!</p>
                 <p>$149.99</p>
                 <button onclick="addToCart('Alitas Picantes', 149.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="https://st.depositphotos.com/1718692/4864/i/380/depositphotos_48644031-stock-photo-chicken-wings-in-hot-sauce.jpg" alt="Alitas de pollo">
-                <h3>Alitas BBQ</h3>
-                <p>¡Una explosión de sabor en cada bocado! Alitas con salsa BBQ que no te querrás perder.</p>
+                <img src="https://st3.depositphotos.com/13349494/31763/i/380/depositphotos_317631476-stock-photo-delicious-chicken-nuggets-ketchup-mayonnaise.jpg" alt="Nuggets de pollo">
+                <h3>Nuggets con Salsas</h3>
+              <p>¿Un antojito?</p>
+                <p>$129.99</p>
+                <button onclick="addToCart('Nuggets con Salsas', 129.99)">Agregar al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://st.depositphotos.com/1031681/4536/i/380/depositphotos_45365775-stock-photo-chicken-stripsy%C2%A0.jpg" alt="Tiras de pollo">
+                <h3>Tiras de Pollo</h3>
+              <p>Deliciosas Tiritas de Pollo Frito con tu salsa preferida</p>
+                <p>$139.99</p>
+                <button onclick="addToCart('Tiras de Pollo', 139.99)">Agregar al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://st.depositphotos.com/1692343/4163/i/380/depositphotos_41631619-stock-photo-homemade-southern-fried-chicken.jpg" alt="Pollo frito casero">
+                <h3>Pollo Frito Casero</h3>
+              <p>Delicioso Pollo Frito como en casa. ¡Irresistible!</p>
+                <p>$169.99</p>
+                <button onclick="addToCart('Pollo Frito Casero', 169.99)">Agregar al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://freerangestock.com/thumbnail/123137/chicken-wings--bbq-party-.jpg" alt="Alitas de pollo BBQ">
+                <h3>Alitas de Pollo BBQ</h3>
+                <p>Deliciosas alitas de pollo bañadas en salsa BBQ</p>
                 <p>$159.99</p>
-                <button onclick="addToCart('Alitas BBQ', 159.99)">Agregar al carrito</button>
+                <button onclick="addToCart('Alitas de Pollo BBQ', 159.99)">Agregar al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://freerangestock.com/thumbnail/21202/deliious-tarts.jpg" alt="Tartas Deliciosas">
+                <h3>Tartas Deliciosas</h3>
+                <p>Tartas dulces perfectas para el postre</p>
+                <p>$99.99</p>
+                <button onclick="addToCart('Tartas Deliciosas', 99.99)">Agregar al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://freerangestock.com/thumbnail/136655/puerto-rican-flan.jpg" alt="Flan Puertorriqueño">
+                <h3>Flan Puertorriqueño</h3>
+                <p>Flan tradicional de Puerto Rico, suave y cremoso</p>
+                <p>$89.99</p>
+                <button onclick="addToCart('Flan Puertorriqueño', 89.99)">Agregar al carrito</button>
+            </div><div class="menu-item">
+                <img src="https://freerangestock.com/thumbnail/2286/soda-illustration.jpg">
+                <h3>Refresco</h3>
+          <p>CocaCola, Sprite, Fanta, CocaZero</p>
+                <p>$35.00</p>
+                <button onclick="addToCart('Refresco', 149.99)">Agregar al carrito</button>
             </div>
         </div>
     </main>
-    <div id="cart">Ver Carrito</div>
+    <div id="cart" onclick="toggleCart()">Carrito</div>
     <div id="cart-modal">
-        <span id="close-cart">&times;</span>
-        <h2>Tu Carrito</h2>
+        <span id="close-cart" onclick="toggleCart()">&#10005;</span>
+        <h2>Carrito de Compras</h2>
         <ul id="cart-items"></ul>
-        <div id="cart-total">Total: $0.00</div>
-        <button id="whatsapp-button">Contáctanos por WhatsApp</button>
+        <div id="cart-total"></div>
+        <button id="whatsapp-button" onclick="checkout()">Ordenar via WhatsApp</button>
     </div>
     <script>
-        const cart = [];
-        const cartItems = document.getElementById('cart-items');
-        const cartTotal = document.getElementById('cart-total');
-        const cartModal = document.getElementById('cart-modal');
-        const closeCart = document.getElementById('close-cart');
-        const cartButton = document.getElementById('cart');
-
-        function updateCart() {
-            cartItems.innerHTML = '';
-            let total = 0;
-            cart.forEach(item => {
-                const li = document.createElement('li');
-                li.innerHTML = `${item.name} <span class="quantity-control">
-                <button onclick="changeQuantity('${item.name}', -1)">-</button>
-                <span>${item.quantity}</span>
-                <button onclick="changeQuantity('${item.name}', 1)">+</button>
-                </span> - $${(item.price * item.quantity).toFixed(2)}`;
-                cartItems.appendChild(li);
-                total += item.price * item.quantity;
-            });
-            cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-        }
+        let cart = [];
 
         function addToCart(name, price) {
-            const item = cart.find(item => item.name === name);
+            const item = cart.find(i => i.name === name);
             if (item) {
                 item.quantity++;
             } else {
                 cart.push({ name, price, quantity: 1 });
             }
             updateCart();
-            showCartModal();
         }
 
-        function changeQuantity(name, amount) {
-            const item = cart.find(item => item.name === name);
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${item.name} - $${item.price.toFixed(2)}
+                    <div class="quantity-control">
+                        <button onclick="changeQuantity('${item.name}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="changeQuantity('${item.name}', 1)">+</button>
+                    </div>
+                `;
+                cartItems.appendChild(li);
+                total += item.price * item.quantity;
+            });
+            document.getElementById('cart-total').innerText = `Total: $${total.toFixed(2)}`;
+        }
+
+        function changeQuantity(name, change) {
+            const item = cart.find(i => i.name === name);
             if (item) {
-                item.quantity += amount;
+                item.quantity += change;
                 if (item.quantity <= 0) {
-                    const index = cart.indexOf(item);
-                    cart.splice(index, 1);
+                    cart = cart.filter(i => i.name !== name);
                 }
-                updateCart();
             }
+            updateCart();
         }
 
-        function showCartModal() {
-            cartModal.style.display = 'block';
+        function toggleCart() {
+            const cartModal = document.getElementById('cart-modal');
+            cartModal.style.display = cartModal.style.display === 'none' || cartModal.style.display === '' ? 'block' : 'none';
         }
 
-        function hideCartModal() {
-            cartModal.style.display = 'none';
+        function checkout() {
+            let message = 'Hola! Me gustaría ordenar:\n';
+            cart.forEach(item => {
+                message += `${item.quantity} x ${item.name} - $${item.price.toFixed(2)}\n`;
+            });
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            message += `\nTotal: $${total.toFixed(2)}`;
+            window.open(`https://wa.me/5533355687?text=${encodeURIComponent(message)}`);
         }
-
-        cartButton.addEventListener('click', showCartModal);
-        closeCart.addEventListener('click', hideCartModal);
-
-        // WhatsApp button
-        document.getElementById('whatsapp-button').onclick = function() {
-            window.open('https://wa.me/5533355687');
-        };
     </script>
 </body>
 </html>
