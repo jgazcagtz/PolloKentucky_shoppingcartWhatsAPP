@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El gallito bien happy - Pollo Estilo Kentucky</title>
+    <title>El Gallito Bien Happy</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
         
@@ -16,30 +16,30 @@
         header {
             background-color: #FF6B35;
             color: white;
-            padding: 1em;
+            padding: 2em 1em;
             text-align: center;
+            position: relative;
         }
         .header-content {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px; /* Ajusta el espacio arriba del header */
         }
         .logo {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-right: 20px;
-        }
-        .title-container {
-            flex-grow: 1;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         h1 {
             margin: 0;
-            font-size: 2em;
+            font-size: 2.5em;
         }
         .subheading {
-            font-size: 1em;
+            font-size: 1.2em;
             margin-top: 0.5em;
             font-style: italic;
         }
@@ -168,10 +168,8 @@
     <header>
         <div class="header-content">
             <img src="https://st3.depositphotos.com/29384342/35247/v/380/depositphotos_352476890-stock-illustration-cartoon-rooster-holding-fried-chicken.jpg" alt="Logo El gallito bien happy" class="logo">
-            <div class="title-container">
-                <h1>🐔El Gallito Bien Happy🍗</h1>
-                <div class="subheading">Pollo Estilo Kentucky - el más crujiente del rumbo!</div>
-            </div>
+            <h1>🐔El Gallito Bien Happy🍗</h1>
+            <div class="subheading">Pollo Estilo Kentucky - el más crujiente del rumbo!</div>
         </div>
     </header>
     <main>
@@ -219,61 +217,60 @@
                 <button onclick="addToCart('Tiras de Pollo', 139.99)">Agregar al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="https://static6.depositphotos.com/1003814/554/i/450/depositphotos_5547235-stock-photo-fried-fish-fillet.jpg" alt="Pescado frito y papas">
-                <h3>Pescado Frito</h3>
+                <img src="https://st.depositphotos.com/1718692/4864/i/380/depositphotos_48644031-stock-photo-chicken-wings-in-hot-sauce.jpg" alt="Alitas de pollo">
+                <h3>Alitas BBQ</h3>
                 <p>$159.99</p>
-                <button onclick="addToCart('Pescado Frito', 159.99)">Agregar al carrito</button>
+                <button onclick="addToCart('Alitas BBQ', 159.99)">Agregar al carrito</button>
             </div>
         </div>
     </main>
-    <div id="cart" onclick="toggleCart()">Carrito</div>
+    <div id="cart">Ver Carrito</div>
     <div id="cart-modal">
-        <span id="close-cart" onclick="toggleCart()">&#x2715;</span>
-        <h2>Carrito de Compras</h2>
+        <span id="close-cart">&times;</span>
+        <h2>Tu Carrito</h2>
         <ul id="cart-items"></ul>
         <div id="cart-total">Total: $0.00</div>
-        <button id="whatsapp-button" onclick="checkout()">Hacer Pedido por WhatsApp</button>
+        <button id="whatsapp-button">Contáctanos por WhatsApp</button>
     </div>
-
     <script>
         const cart = [];
-        const cartModal = document.getElementById('cart-modal');
         const cartItems = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
-
-        function addToCart(name, price) {
-            const item = cart.find(i => i.name === name);
-            if (item) {
-                item.quantity++;
-            } else {
-                cart.push({ name, price, quantity: 1 });
-            }
-            updateCart();
-        }
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const cartButton = document.getElementById('cart');
 
         function updateCart() {
             cartItems.innerHTML = '';
             let total = 0;
             cart.forEach(item => {
                 const li = document.createElement('li');
-                li.innerHTML = `
-                    ${item.name} - $${item.price.toFixed(2)} x ${item.quantity}
-                    <div class="quantity-control">
-                        <button onclick="changeQuantity('${item.name}', -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button onclick="changeQuantity('${item.name}', 1)">+</button>
-                    </div>
-                `;
+                li.innerHTML = `${item.name} <span class="quantity-control">
+                <button onclick="changeQuantity('${item.name}', -1)">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="changeQuantity('${item.name}', 1)">+</button>
+                </span> - $${(item.price * item.quantity).toFixed(2)}`;
                 cartItems.appendChild(li);
                 total += item.price * item.quantity;
             });
             cartTotal.textContent = `Total: $${total.toFixed(2)}`;
         }
 
-        function changeQuantity(name, delta) {
-            const item = cart.find(i => i.name === name);
+        function addToCart(name, price) {
+            const item = cart.find(item => item.name === name);
             if (item) {
-                item.quantity += delta;
+                item.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+            showCartModal();
+        }
+
+        function changeQuantity(name, amount) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity += amount;
                 if (item.quantity <= 0) {
                     const index = cart.indexOf(item);
                     cart.splice(index, 1);
@@ -282,20 +279,21 @@
             }
         }
 
-        function toggleCart() {
-            cartModal.style.display = cartModal.style.display === 'none' || cartModal.style.display === '' ? 'block' : 'none';
+        function showCartModal() {
+            cartModal.style.display = 'block';
         }
 
-        function checkout() {
-            let message = 'Hola! Me gustaría ordenar:\n\n';
-            cart.forEach(item => {
-                message += `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}\n`;
-            });
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            message += `\nTotal: $${total.toFixed(2)}`;
-            const whatsappUrl = `https://wa.me/5533355687?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+        function hideCartModal() {
+            cartModal.style.display = 'none';
         }
+
+        cartButton.addEventListener('click', showCartModal);
+        closeCart.addEventListener('click', hideCartModal);
+
+        // WhatsApp button
+        document.getElementById('whatsapp-button').onclick = function() {
+            window.open('https://wa.me/5533355687');
+        };
     </script>
 </body>
 </html>
