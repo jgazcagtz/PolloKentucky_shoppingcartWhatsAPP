@@ -545,6 +545,10 @@
             <h3>🛒 Carrito</h3>
             <div id="cart-items"></div>
             <p id="cart-total">Total: $0.00</p>
+            <p>Dirección de Entrega:</p>
+            <input type="text" id="delivery-address" placeholder="Ingresa tu dirección aquí..." style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd;">
+            <p>Notas:</p>
+            <textarea id="order-notes" placeholder="Agrega notas adicionales..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;"></textarea>
             <p>Pagar con PayPal:</p><br>
             <div id="paypal-form"></div>
             <p>Método de pago:</p>
@@ -560,7 +564,7 @@
             </ul>
             <p><a id="whatsapp-btn" href="#" target="_blank" style="display: none;">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-                Confirmar orden-Whatsapp
+                Confirmar orden - Whatsapp
               </a></p>
             <br>
             <button class="edit-btn" onclick="toggleModal()">Editar Carrito</button>
@@ -596,6 +600,15 @@
         </div>
     </div>
 
+    <!-- Product Info Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleProductModal()">&times;</span>
+            <div id="product-modal-content"></div>
+            <button class="choose-btn" onclick="addProductToCart()">Añadir al Carrito</button>
+        </div>
+    </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const products = [
@@ -613,8 +626,9 @@
             { name: "Refresco", img: "https://freerangestock.com/thumbnail/2286/soda-illustration.jpg", price: 35.00, includes: "CocaCola, Sprite, Fanta, CocaZero." }
         ];
 
-        const cart = [];
+        let cart = [];
         let total = 0;
+        let selectedProduct = null;
 
         function createProductElement(product, index, layout = 'horizontal') {
             const productItem = document.createElement('div');
@@ -632,25 +646,50 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                    <p><button class="choose-btn" onclick="window.addToCart(${index}, ${product.price})">Elegir</button></p>
+                    <p><button class="choose-btn" onclick="window.showProductModal(${index}, '${layout}')">Elegir</button></p>
                 </div>
             `;
             return productItem;
         }
 
-        window.addToCart = function(index, price) {
+        function displayProducts(productsToDisplay, layout = 'horizontal', containerId) {
+            const menu = document.getElementById(containerId);
+            menu.innerHTML = '';
+            productsToDisplay.forEach((product, index) => {
+                menu.appendChild(createProductElement(product, index, layout));
+            });
+        }
+
+        window.showProductModal = function(index, layout = 'horizontal') {
+            const product = products[index];
             const quantitySelect = document.getElementById(`quantity-${index}`);
             const quantity = parseInt(quantitySelect.value);
-            const product = products[index];
-            const existingProduct = cart.find(item => item.name === product.name);
+            selectedProduct = { ...product, quantity };
+
+            const modalContent = document.getElementById('product-modal-content');
+            modalContent.innerHTML = `
+                <h3>${selectedProduct.name}</h3>
+                <img src="${selectedProduct.img}" alt="${selectedProduct.name}" style="width: 100px; height: 100px;">
+                <p>Precio: $${selectedProduct.price.toFixed(2)}</p>
+                <p>${selectedProduct.includes}</p>
+                <p>Cantidad: ${selectedProduct.quantity}</p>
+            `;
+
+            toggleProductModal();
+        };
+
+        window.addProductToCart = function() {
+            const existingProduct = cart.find(item => item.name === selectedProduct.name);
 
             if (existingProduct) {
-                existingProduct.quantity += quantity;
+                existingProduct.quantity += selectedProduct.quantity;
             } else {
-                cart.push({ name: product.name, price: price, quantity: quantity });
+                cart.push({ name: selectedProduct.name, price: selectedProduct.price, quantity: selectedProduct.quantity });
             }
-            alert(`Producto agregado al carrito: ${product.name} x ${quantity}`);
+
             updateCart();
+            toggleProductModal();
+            alert(`Producto agregado al carrito: ${selectedProduct.name} x ${selectedProduct.quantity}`);
         };
 
         function updateCart() {
@@ -720,7 +759,9 @@
             const whatsappBtn = document.getElementById('whatsapp-btn');
             const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
             const selectedDeliveryMethod = document.querySelector('input[name="delivery-method"]:checked').value;
-            const message = `Orden de Rosticería:\n${cart.map(item => `${item.name} (${item.quantity}) - $${item.price} c/u`).join('\n')}\nTotal: $${total.toFixed(2)}\nMétodo de pago: ${selectedPaymentMethod}\nMétodo de entrega: ${selectedDeliveryMethod}`;
+            const deliveryAddress = document.getElementById('delivery-address').value || 'No especificada';
+            const orderNotes = document.getElementById('order-notes').value || 'Sin notas adicionales';
+            const message = `Orden de Rosticería:\n${cart.map(item => `${item.name} (${item.quantity}) - $${item.price} c/u`).join('\n')}\nTotal: $${total.toFixed(2)}\nMétodo de pago: ${selectedPaymentMethod}\nMétodo de entrega: ${selectedDeliveryMethod}\nDirección de Entrega: ${deliveryAddress}\nNotas: ${orderNotes}`;
             const encodedMessage = encodeURIComponent(message);
             whatsappBtn.href = `https://wa.me/525533355687?text=${encodedMessage}`;
             whatsappBtn.style.display = total > 0 ? 'inline-flex' : 'none';
@@ -735,16 +776,8 @@
             updateCart();
         };
 
-        // Sort products by price in descending order and select the top 6
-        const topProducts = [...products].sort((a, b) => b.price - a.price).slice(0, 6);
-
-        topProducts.forEach((product, index) => {
-            document.getElementById('menu-horizontal').appendChild(createProductElement(product, index, 'horizontal'));
-        });
-
-        products.forEach((product, index) => {
-            document.getElementById('menu-vertical').appendChild(createProductElement(product, index, 'vertical'));
-        });
+        displayProducts(products.slice(0, 6), 'horizontal', 'menu-horizontal');
+        displayProducts(products, 'vertical', 'menu-vertical');
     });
 
     function toggleCart() {
@@ -757,11 +790,18 @@
         modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'block' : 'none';
     }
 
+    function toggleProductModal() {
+        const modal = document.getElementById('product-modal');
+        modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'block' : 'none';
+    }
+
     window.onclick = function(event) {
-        const modal = document.getElementById('edit-modal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
+        const modals = [document.getElementById('edit-modal'), document.getElementById('product-modal')];
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
     }
 </script>
 
